@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BankModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Beneficiary">
+    <Key>
+      <PropertyRef Name="BeneficiaryId" />
+    </Key>
+    <Property Name="BeneficiaryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Firstname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Lastname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="AccountNum" Type="Int32" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Amount" Type="Int32" Nullable="false" />
+    <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CustomerId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="CustomerDetail" Relationship="Self.FK__Beneficia__Custo__182C9B23" FromRole="Beneficiary" ToRole="CustomerDetails" />
+  </EntityType>
+  <EntityType Name="CustomerDetail">
+    <Key>
+      <PropertyRef Name="CustomerId" />
+    </Key>
+    <Property Name="CustomerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Firstname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Lastname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Phone" Type="Int64" Nullable="false" />
+    <Property Name="DateOfBirth" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="AccountNum" Type="Int32" Nullable="false" />
+    <Property Name="Pin" Type="Int32" Nullable="false" />
+    <Property Name="OpeningBal" Type="Int32" Nullable="false" />
+    <Property Name="AadharNum" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Beneficiaries" Relationship="Self.FK__Beneficia__Custo__182C9B23" FromRole="CustomerDetails" ToRole="Beneficiary" />
+    <NavigationProperty Name="Transaction_Details" Relationship="Self.FK__Transacti__Custo__15502E78" FromRole="CustomerDetails" ToRole="Transaction_Details" />
+  </EntityType>
+  <EntityType Name="Transaction_Details">
+    <Key>
+      <PropertyRef Name="TransactionId" />
+    </Key>
+    <Property Name="TransactionId" Type="Int32" Nullable="false" />
+    <Property Name="Date_Time" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+    <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Debit" Type="Int32" />
+    <Property Name="Credit" Type="Int32" />
+    <Property Name="Balance" Type="Int32" Nullable="false" />
+    <Property Name="CustomerId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="CustomerDetail" Relationship="Self.FK__Transacti__Custo__15502E78" FromRole="Transaction_Details" ToRole="CustomerDetails" />
+  </EntityType>
+  <Association Name="FK__Beneficia__Custo__182C9B23">
+    <End Role="CustomerDetails" Type="Self.CustomerDetail" Multiplicity="1" />
+    <End Role="Beneficiary" Type="Self.Beneficiary" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CustomerDetails">
+        <PropertyRef Name="CustomerId" />
+      </Principal>
+      <Dependent Role="Beneficiary">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Transacti__Custo__15502E78">
+    <End Role="CustomerDetails" Type="Self.CustomerDetail" Multiplicity="1" />
+    <End Role="Transaction_Details" Type="Self.Transaction_Details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CustomerDetails">
+        <PropertyRef Name="CustomerId" />
+      </Principal>
+      <Dependent Role="Transaction_Details">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="BankEntities4" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Beneficiaries" EntityType="Self.Beneficiary" />
+    <EntitySet Name="CustomerDetails" EntityType="Self.CustomerDetail" />
+    <EntitySet Name="Transaction_Details" EntityType="Self.Transaction_Details" />
+    <AssociationSet Name="FK__Beneficia__Custo__182C9B23" Association="Self.FK__Beneficia__Custo__182C9B23">
+      <End Role="CustomerDetails" EntitySet="CustomerDetails" />
+      <End Role="Beneficiary" EntitySet="Beneficiaries" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Transacti__Custo__15502E78" Association="Self.FK__Transacti__Custo__15502E78">
+      <End Role="CustomerDetails" EntitySet="CustomerDetails" />
+      <End Role="Transaction_Details" EntitySet="Transaction_Details" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
